@@ -1,0 +1,364 @@
+/*
+  PageTurnBook - componente de paginação pela ponta inferior direita
+  Sem dependências. Use junto com page-turn-book.js
+*/
+
+.page-turn-book {
+  --pt-duration: 900ms;
+  --pt-corner-size: 96px;
+  --pt-radius: 18px;
+  --pt-paper: #fffaf2;
+  --pt-paper-2: #f4ecdf;
+  --pt-border: rgba(115, 86, 55, 0.20);
+  --pt-shadow: rgba(38, 25, 12, 0.28);
+  --pt-accent: #b7864b;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  perspective: 1800px;
+  overflow: hidden;
+  border-radius: var(--pt-radius);
+  isolation: isolate;
+  background: var(--pt-paper-2);
+  touch-action: none;
+  user-select: none;
+}
+
+.page-turn-book__page {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: var(--pt-radius);
+  transform: rotateY(0deg);
+  transform-origin: 100% 100%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+
+  background:
+    linear-gradient(90deg, rgba(77, 49, 23, .055), transparent 10%),
+    linear-gradient(135deg, var(--pt-paper) 0%, var(--pt-paper-2) 100%);
+  box-shadow:
+    0 26px 70px var(--pt-shadow),
+    inset 0 0 0 1px rgba(255,255,255,.58);
+}
+
+.page-turn-book__page::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid var(--pt-border);
+  border-radius: calc(var(--pt-radius) - 4px);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.page-turn-book__page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .7;
+  z-index: 2;
+  background:
+    radial-gradient(circle at 8% 4%, rgba(255,255,255,.85), transparent 22%),
+    repeating-linear-gradient(90deg, rgba(91, 63, 36, .028) 0 1px, transparent 1px 7px);
+}
+
+.page-turn-book__page.is-active {
+  z-index: 4;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.page-turn-book__page.is-under {
+  z-index: 3;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.page-turn-book__page.is-being-dragged {
+  z-index: 12;
+  box-shadow: 0 34px 84px var(--pt-shadow);
+}
+
+.page-turn-book__page.is-turning-next {
+  z-index: 8;
+  opacity: 1;
+  pointer-events: none;
+  animation: ptTurnFromBottomRight var(--pt-duration) cubic-bezier(.33,.02,.18,1) forwards;
+}
+
+.page-turn-book__page.is-returning-prev {
+  z-index: 8;
+  opacity: 1;
+  pointer-events: none;
+  animation: ptReturnToBottomRight var(--pt-duration) cubic-bezier(.33,.02,.18,1) forwards;
+}
+
+/* Dobra visual na própria página durante a virada */
+.page-turn-book__page.is-turning-next .page-turn-book__curl,
+.page-turn-book__page.is-returning-prev .page-turn-book__curl {
+  opacity: 1;
+}
+
+.page-turn-book__curl {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 46%;
+  height: 46%;
+  z-index: 7;
+  opacity: 0;
+  pointer-events: none;
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+  background:
+    linear-gradient(315deg,
+      rgba(255,255,255,.98) 0%,
+      rgba(248,239,226,.94) 28%,
+      rgba(169,137,93,.22) 48%,
+      rgba(70,45,18,.26) 64%,
+      rgba(255,255,255,0) 66%);
+  filter: drop-shadow(-16px -16px 22px rgba(44, 29, 14, .28));
+}
+
+.page-turn-book__page.is-turning-next .page-turn-book__curl {
+  animation: ptCurlNext var(--pt-duration) cubic-bezier(.33,.02,.18,1) forwards;
+}
+
+.page-turn-book__page.is-returning-prev .page-turn-book__curl {
+  animation: ptCurlPrev var(--pt-duration) cubic-bezier(.33,.02,.18,1) forwards;
+}
+
+/* Botão invisível/clicável no canto inferior direito */
+.page-turn-book__hotspot {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  width: var(--pt-corner-size);
+  height: var(--pt-corner-size);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+}
+
+.page-turn-book__hotspot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(315deg,
+      rgba(255,255,255,.98) 0 12%,
+      rgba(244,235,220,.92) 13% 32%,
+      rgba(174,135,75,.28) 48%,
+      rgba(255,255,255,0) 66%);
+  filter: drop-shadow(-10px -10px 12px rgba(39,25,12,.20));
+  opacity: .72;
+  transition: transform .22s ease, opacity .22s ease;
+  transform-origin: 100% 100%;
+}
+
+.page-turn-book__hotspot::after {
+  content: "";
+  position: absolute;
+  right: 9px;
+  bottom: 9px;
+  width: 28px;
+  height: 28px;
+  border-right: 2px solid rgba(105,73,39,.46);
+  border-bottom: 2px solid rgba(105,73,39,.46);
+  opacity: .55;
+}
+
+/* Left hotspot: mirror of bottom-right for returning pages */
+.page-turn-book__hotspot--left {
+  left: 0;
+  right: auto;
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+
+.page-turn-book__hotspot--left::before {
+  transform-origin: 0% 100%;
+}
+
+.page-turn-book__hotspot--left::after {
+  content: "";
+  position: absolute;
+  left: 9px;
+  bottom: 9px;
+  width: 28px;
+  height: 28px;
+  border-left: 2px solid rgba(105,73,39,.46);
+  border-bottom: 2px solid rgba(105,73,39,.46);
+  opacity: .55;
+}
+
+.page-turn-book__hotspot--left .page-turn-book__hint {
+  right: auto;
+  left: 12px;
+  transform: rotate(8deg);
+}
+
+.page-turn-book__hotspot:hover::before,
+.page-turn-book__hotspot:focus-visible::before {
+  opacity: 1;
+  transform: translate(-6px, -6px) rotate(-4deg);
+}
+
+.page-turn-book__hint {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  z-index: 22;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: lowercase;
+  color: rgba(78, 57, 35, .8);
+  pointer-events: none;
+  transform: rotate(-8deg);
+  transition: opacity .2s ease;
+}
+
+.page-turn-book.is-last .page-turn-book__hint {
+  opacity: .45;
+}
+
+.page-turn-book.is-dragging .page-turn-book__hint {
+  opacity: 0;
+}
+
+.page-turn-book.is-animating .page-turn-book__hotspot {
+  pointer-events: none;
+}
+
+/* Estado opcional: quando chegar na última página */
+.page-turn-book.is-last .page-turn-book__hotspot {
+  opacity: .25;
+  cursor: default;
+}
+
+.page-turn-book.is-last .page-turn-book__hotspot::before {
+  transform: none;
+}
+
+/* Indicador opcional */
+.page-turn-book__counter {
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  z-index: 21;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font: 500 12px/1 system-ui, sans-serif;
+  color: rgba(50, 39, 29, .72);
+  background: rgba(255,255,255,.55);
+  backdrop-filter: blur(8px);
+}
+
+/* Animações principais */
+@keyframes ptTurnFromBottomRight {
+  0% {
+    opacity: 1;
+    transform: rotateY(0deg) rotateZ(0deg) translateX(0) translateZ(0);
+    filter: brightness(1);
+  }
+  32% {
+    opacity: 1;
+    transform: rotateY(-28deg) rotateZ(-1.8deg) translateX(-3px) translateZ(0);
+    filter: brightness(.98);
+  }
+  64% {
+    opacity: .92;
+    transform: rotateY(-86deg) rotateZ(-4.6deg) translateX(-18px) translateZ(-8px);
+    filter: brightness(.93);
+  }
+  100% {
+    opacity: 0;
+    transform: rotateY(-132deg) rotateZ(-7.2deg) translateX(-34px) translateZ(-16px);
+    filter: brightness(.84);
+  }
+}
+
+@keyframes ptReturnToBottomRight {
+  0% {
+    opacity: 0;
+    transform: rotateY(-132deg) rotateZ(-7.2deg) translateX(-34px) translateZ(-16px);
+    filter: brightness(.84);
+  }
+  30% {
+    opacity: 1;
+    transform: rotateY(-90deg) rotateZ(-4.8deg) translateX(-18px) translateZ(-8px);
+    filter: brightness(.93);
+  }
+  70% {
+    opacity: 1;
+    transform: rotateY(-30deg) rotateZ(-1.9deg) translateX(-4px) translateZ(0);
+    filter: brightness(.98);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg) rotateZ(0deg) translateX(0) translateZ(0);
+    filter: brightness(1);
+  }
+}
+
+@keyframes ptCurlNext {
+  0% {
+    width: 18%;
+    height: 18%;
+    opacity: .2;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  38% {
+    width: 42%;
+    height: 42%;
+    opacity: 1;
+    transform: translate(-8%, -8%) rotate(-3deg);
+  }
+  100% {
+    width: 72%;
+    height: 72%;
+    opacity: 0;
+    transform: translate(-42%, -42%) rotate(-12deg);
+  }
+}
+
+@keyframes ptCurlPrev {
+  0% {
+    width: 72%;
+    height: 72%;
+    opacity: 0;
+    transform: translate(-42%, -42%) rotate(-12deg);
+  }
+  40% {
+    width: 42%;
+    height: 42%;
+    opacity: 1;
+    transform: translate(-8%, -8%) rotate(-3deg);
+  }
+  100% {
+    width: 18%;
+    height: 18%;
+    opacity: .25;
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  .page-turn-book__page,
+  .page-turn-book__page.is-turning-next,
+  .page-turn-book__page.is-returning-prev,
+  .page-turn-book__curl {
+    animation: none !important;
+    transition: none !important;
+  }
+}

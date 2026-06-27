@@ -1,0 +1,428 @@
+:root {
+  --paper: #f7f3ec;
+  --paper-2: #ebe4da;
+  --ink: #221d19;
+  --muted: #756d64;
+
+  /* Mude estas variáveis para trocar as cores do modelo */
+  --seal-gold: #c78a2c;
+  --seal-dark: #6f3d06;
+  --seal-light: #ffe59a;
+  --accent: #b8874d;
+  --accent-dark: #6e4a28;
+
+  --shadow: rgba(0, 0, 0, .25);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: #ddd5ca;
+  color: var(--ink);
+  font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  display: grid;
+  place-items: center;
+}
+
+.phone-frame {
+  position: relative;
+  width: min(100vw, 430px);
+  min-height: 100vh;
+  overflow: hidden;
+  background: #f6f0e8;
+  box-shadow: 0 28px 80px rgba(0,0,0,.28);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* =========================
+   CAPA
+========================= */
+
+.cover {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  background: #f3eee6;
+  isolation: isolate;
+}
+
+.photo-layer {
+  position: absolute;
+  inset: 0;
+  background: url("assets/foto.JPEG") center bottom / cover no-repeat;
+  transform: scale(1.02);
+  z-index: 1;
+}
+
+.light-wash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    radial-gradient(circle at 8% 41%, rgba(255, 222, 176, .72), transparent 22%),
+    linear-gradient(to bottom,
+      rgba(255,255,255,.78) 0%,
+      rgba(255,255,255,.55) 18%,
+      rgba(255,255,255,.20) 42%,
+      rgba(250,245,237,.18) 64%,
+      rgba(250,245,237,.80) 92%,
+      rgba(250,245,237,.92) 100%);
+}
+
+
+
+
+
+
+
+.cover-copy {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 6.5vh;
+  z-index: 6;
+  text-align: center;
+}
+
+.cover-copy h1 {
+  margin: 0 0 24px;
+  font-family: "Great Vibes", cursive;
+  font-size: clamp(58px, 16vw, 82px);
+  line-height: .92;
+  font-weight: 400;
+  color: #1f1a16;
+  text-shadow: 0 2px 12px rgba(255,255,255,.6);
+}
+
+.cover-copy h1 span {
+  font-size: .72em;
+}
+
+.cover-copy p {
+  margin: 0;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: clamp(17px, 4.7vw, 24px);
+  line-height: 1.25;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+  color: #2e2924;
+  text-shadow: 0 2px 12px rgba(255,255,255,.74);
+}
+
+.cover.opening {
+  animation: fade .65s ease forwards;
+}
+
+@keyframes fade {
+  to { opacity: 0; }
+}
+
+/* =========================
+   CONVITE INTERNO
+========================= */
+
+.invite {
+  position: relative;
+  min-height: 100vh;
+  padding: max(18px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+  overflow: hidden;
+}
+
+.invite-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(255,255,255,.88), rgba(255,255,255,.65)),
+    url("assets/foto-casal-exemplo.jpg") center / cover no-repeat;
+  filter: blur(10px) saturate(.82);
+  transform: scale(1.08);
+  z-index: 0;
+}
+
+.invite-header,
+.book,
+.controls {
+  position: relative;
+  z-index: 1;
+}
+
+.invite-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.invite-header strong {
+  display: block;
+  font-family: "Cinzel", Georgia, serif;
+  letter-spacing: .8px;
+  font-size: 16px;
+}
+
+.invite-header small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+}
+
+.circle-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(80,70,55,.16);
+  border-radius: 50%;
+  background: rgba(255,255,255,.58);
+  color: var(--ink);
+  font-size: 22px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.book {
+  min-height: calc(100vh - 156px);
+  perspective: 1600px;
+}
+
+.page {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: left center;
+  transform: rotateY(94deg) translateX(16px);
+  transition: transform .72s ease, opacity .36s ease;
+  background:
+    linear-gradient(90deg, rgba(72,48,21,.06), transparent 9%),
+    linear-gradient(135deg, #fffaf1 0%, var(--paper) 100%);
+  box-shadow:
+    0 28px 70px rgba(50,32,18,.25),
+    inset 0 0 0 1px rgba(255,255,255,.55);
+}
+
+.page.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: rotateY(0deg) translateX(0);
+}
+
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(184,135,77,.30);
+  border-radius: 15px;
+  pointer-events: none;
+}
+
+.page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 10% 5%, rgba(255,255,255,.9), transparent 20%),
+    repeating-linear-gradient(90deg, rgba(92,65,36,.025) 0 1px, transparent 1px 7px);
+  pointer-events: none;
+  opacity: .7;
+}
+
+.page-inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  padding: 52px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Card-like treatment (similar to RSVP page) applied to all pages */
+.page-card {
+  background: rgba(255,255,255,0.92);
+  border-radius: 16px;
+  padding: 48px 32px;
+  box-shadow: 0 20px 50px rgba(40,28,16,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+  min-height: calc(100% - 40px);
+}
+
+.page-inner.center {
+  align-items: center;
+  text-align: center;
+}
+
+.overline {
+  margin: 0 0 12px;
+  color: var(--accent-dark);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2.4px;
+  font-size: 11px;
+}
+
+.page h2 {
+  margin: 0 0 20px;
+  font-family: "Great Vibes", cursive;
+  font-size: clamp(48px, 14vw, 64px);
+  line-height: .9;
+  font-weight: 400;
+  color: #2b211a;
+}
+
+.page p,
+.details-list {
+  font-size: 15px;
+  line-height: 1.78;
+  color: #4e463e;
+}
+
+.lead {
+  max-width: 310px;
+}
+
+.date {
+  font-family: "Cinzel", Georgia, serif;
+  color: var(--accent-dark) !important;
+  font-size: 18px !important;
+}
+
+.ornament {
+  width: 115px;
+  height: 1px;
+  margin: 18px 0 22px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.details-list {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.details-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(88,65,38,.12);
+}
+
+.details-list strong {
+  color: #2b211a;
+}
+
+.details-list span {
+  text-align: right;
+}
+
+.primary-btn,
+.ghost-link,
+.control-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.primary-btn {
+  margin-top: 16px;
+  border: none;
+  padding: 0 22px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  box-shadow: 0 10px 24px rgba(110, 74, 40, .24);
+}
+
+.ghost-link {
+  margin-top: 12px;
+  padding: 0 18px;
+  border: 1px solid rgba(110,74,40,.22);
+  color: var(--accent-dark);
+  background: rgba(255,255,255,.38);
+}
+
+.rsvp {
+  display: grid;
+  gap: 12px;
+}
+
+.rsvp label {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.rsvp input,
+.rsvp textarea {
+  width: 100%;
+  margin-top: 6px;
+  padding: 13px 14px;
+  border: 1px solid rgba(80,70,55,.15);
+  border-radius: 13px;
+  background: rgba(255,255,255,.72);
+  color: var(--ink);
+  font: inherit;
+  outline: none;
+}
+
+.rsvp textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.success {
+  min-height: 22px;
+  color: var(--accent-dark) !important;
+  font-weight: 600;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  padding-top: 14px;
+}
+
+.control-btn {
+  flex: 1;
+  border: 1px solid rgba(80,70,55,.15);
+  color: var(--ink);
+  background: rgba(255,255,255,.58);
+  backdrop-filter: blur(10px);
+}
+
+.control-btn:disabled,
+.circle-btn:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+/* =========================
+   ANIMAÇÕES
+========================= */
+
+
+
+@media (max-width: 380px) {
+  .page-inner {
+    padding: 44px 24px;
+  }
+}

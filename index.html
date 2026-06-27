@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Convite de casamento Luana & Jackson</title>
+
+  <!-- Pode remover a linha abaixo se quiser usar apenas fontes locais do sistema -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="page-turn-book.css" />
+</head>
+<body>
+  <main class="phone-frame">
+    <!-- CAPA NO ESTILO DO MODELO: envelope + selo + foto de fundo -->
+    <section id="cover" class="cover" role="button" tabindex="0" aria-label="Abrir convite">
+      <div class="photo-layer"></div>
+      <div class="light-wash"></div>
+
+
+
+      <div class="cover-copy">
+        <h1>Luana <span>&</span> Jackson</h1>
+        <p>Aqui inicia a nossa história.</p>
+        <p>passe o dedo para abrir</p>
+      </div>
+    </section>
+
+    <!-- CONVITE ABERTO -->
+    <section id="invite" class="invite hidden">
+      <div class="invite-bg"></div>
+
+      <header class="invite-header">
+        <button id="backToCover" class="circle-btn" aria-label="Voltar para capa">×</button>
+        <div>
+          <strong>Luana & Jackson</strong>
+          <!-- <small id="counter">1 / 7</small> -->
+        </div>
+        <button id="musicBtn" class="circle-btn" aria-label="Tocar música">♪</button>
+      </header>
+
+      <section id="book" class="book" aria-live="polite">
+        <article class="page active" data-page-turn-page>
+          <div class="page-inner center">
+            <p class="overline">Convite de casamento</p>
+            <h2>Luana & Jackson</h2>
+            <p class="lead">Com alegria, convidamos você para celebrar conosco o início da nossa nova história.</p>
+            <div class="ornament"></div>
+            <p class="date">Sábado, 05 de Dezembro de 2026</p>
+          </div>
+        </article>
+
+        <article class="page" data-page-turn-page>
+          <div class="page-inner">
+            <p class="overline">Nossa história</p>
+            <h2>O começo</h2>
+            <p>Algumas histórias começam em silêncio, outras em um olhar. A nossa foi construída com carinho, cumplicidade e muitos sonhos compartilhados.</p>
+            <p>Agora queremos escrever este novo capítulo ao lado das pessoas que amamos.</p>
+          </div>
+        </article>
+
+        <article class="page" data-page-turn-page>
+          <div class="page-inner">
+            <p class="overline">Cerimônia</p>
+            <h2>O grande dia</h2>
+            <ul class="details-list">
+              <li><strong>Data</strong><span>05/12/2026</span></li>
+              <li><strong>Horário</strong><span>19h30</span></li>
+              <li><strong>Local</strong><span>Capela igreja São Mateus</span></li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="page" data-page-turn-page>
+          <div class="page-inner">
+            <p class="overline">Localização</p>
+            <h2>Como chegar</h2>
+            <p>Toque no botão abaixo para abrir a rota no Google Maps.</p>
+            <a class="primary-btn" href="https://www.google.com/maps/dir//Par%C3%B3quia+S%C3%A3o+Mateus,+R.+S%C3%A3o+Mateus,+629+-+S%C3%A3o+Mateus,+Juiz+de+Fora+-+MG,+36025-000/@-21.7841664,-43.352064,14z/data=!3m1!4b1!4m8!4m7!1m0!1m5!1m1!1s0x989b693adf9f9b:0xdba01570492882f4!2m2!1d-43.3525382!2d-21.7740893?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3Ds" target="_blank" rel="noopener">Abrir localização</a>
+          
+          </div>
+        </article>
+
+        <article class="page" data-page-turn-page>
+          <div class="page-inner">
+
+            <h2>Confirme sua presença</h2>
+
+            <form id="rsvpForm" class="rsvp">
+              <label>
+                Envie seu nome para confirmar sua presença
+          
+              </label>
+
+              <a class="ghost-link" href="https://wa.me/5516998305634" target="_blank" rel="noopener">Confirmar Minha presença</a>
+            </form>
+
+            <p id="rsvpReturn" class="success"></p>
+          </div>
+        </article>
+
+        <article class="page" data-page-turn-page>
+          <div class="page-inner">
+            <p class="overline">Presentes</p>
+            <h2>Lista de presentes</h2>
+            <p>Sua presença é o nosso maior presente. Caso queira nos presentear</p>
+            <a class="ghost-link" href="#" onclick="alert('Troque aqui por sua chave Pix ou página de cotas.'); return false;">Cotas / Pix</a>
+          </div>
+        </article>
+
+        <article class="page" data-page-turn-page>
+          <div class="page-inner center">
+            <p class="overline">Com carinho</p>
+            <h2>Esperamos você</h2>
+            <p class="lead">Obrigado por fazer parte desse momento tão especial.</p>
+        
+          </div>
+        </article>
+      </section>
+
+      <audio id="bgMusic" loop>
+        <!-- Para usar música: crie assets/musica.mp3 e descomente a linha abaixo -->
+        <source src="assets/musica.mp3" type="audio/mpeg" />
+      </audio>
+    </section>
+  </main>
+
+  <script src="page-turn-book.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
