@@ -15,32 +15,20 @@
 </head>
 <body>
   <main class="phone-frame">
-    <!-- CAPA NO ESTILO DO MODELO: envelope + selo + foto de fundo -->
     <section id="cover" class="cover" role="button" tabindex="0" aria-label="Abrir convite">
       <div class="photo-layer"></div>
       <div class="light-wash"></div>
 
-
-
       <div class="cover-copy">
         <h1>Luana <span>&</span> Jackson</h1>
         <p>Aqui inicia a nossa história.</p>
-        <p>passe o dedo para abrir</p>
       </div>
+      <p>passe o dedo para abrir</p>
     </section>
 
     <!-- CONVITE ABERTO -->
     <section id="invite" class="invite hidden">
       <div class="invite-bg"></div>
-
-      <header class="invite-header">
-        <button id="backToCover" class="circle-btn" aria-label="Voltar para capa">×</button>
-        <div>
-          <strong>Luana & Jackson</strong>
-          <!-- <small id="counter">1 / 7</small> -->
-        </div>
-        <button id="musicBtn" class="circle-btn" aria-label="Tocar música">♪</button>
-      </header>
 
       <section id="book" class="book" aria-live="polite">
         <article class="page active" data-page-turn-page>
@@ -116,13 +104,12 @@
             <p class="overline">Com carinho</p>
             <h2>Esperamos você</h2>
             <p class="lead">Obrigado por fazer parte desse momento tão especial.</p>
-        
+            <button type="button" class="back-to-start">Voltar para o início</button>
           </div>
         </article>
       </section>
 
       <audio id="bgMusic" loop>
-        <!-- Para usar música: crie assets/musica.mp3 e descomente a linha abaixo -->
         <source src="assets/musica.mp3" type="audio/mpeg" />
       </audio>
     </section>

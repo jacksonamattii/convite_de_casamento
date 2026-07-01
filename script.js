@@ -1,15 +1,11 @@
 const cover = document.getElementById("cover");
 const invite = document.getElementById("invite");
-const backToCover = document.getElementById("backToCover");
 
 const pages = [...document.querySelectorAll(".page")];
-const counter = document.getElementById("counter");
 
 const rsvpForm = document.getElementById("rsvpForm");
 const rsvpReturn = document.getElementById("rsvpReturn");
-
-const shareBtn = document.getElementById("shareBtn");
-const musicBtn = document.getElementById("musicBtn");
+const backToStartButton = document.querySelector(".back-to-start");
 const bgMusic = document.getElementById("bgMusic");
 
 let pageIndex = 0;
@@ -27,32 +23,6 @@ document.querySelectorAll(".page .page-inner").forEach((inner) => {
   inner.classList.add("page-card");
 });
 
-// Inject a small 'Voltar' button into pages (except first) to go to previous page
-function injectBackButtons() {
-  const pageEls = document.querySelectorAll(".page");
-  pageEls.forEach((page, idx) => {
-    // remove existing to avoid duplicates
-    const existing = page.querySelector('.page-back-btn');
-    if (existing) existing.remove();
-
-    if (idx === 0) return; // first page has no previous
-
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'page-back-btn';
-    btn.textContent = 'Voltar';
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (book) book.prev();
-      else prevPage();
-    });
-
-    page.appendChild(btn);
-  });
-}
-
-// Previously injected top 'Voltar' buttons removed per user request.
-
 function openInvite() {
   if (isOpening) return;
 
@@ -68,14 +38,13 @@ function openInvite() {
       book.goTo(0);
     }
     updatePages();
-    // Auto-play música quando o convite abre
-    try {
-      bgMusic.play();
-      musicBtn.textContent = "⏸";
-    } catch (e) {
-      console.log("Autoplay bloqueado pelo navegador");
-    }
   }, 850);
+}
+
+function startMusic() {
+  if (!bgMusic) return;
+  bgMusic.currentTime = 0;
+  bgMusic.play().catch(() => {});
 }
 
 let dragStartX = 0;
@@ -112,24 +81,25 @@ cover.addEventListener("pointercancel", () => {
   dragActive = false;
 });
 
-function backCover() {
-  invite.classList.add("hidden");
-  cover.classList.remove("hidden", "opening");
-  pageIndex = 0;
-  if (book) {
-    book.goTo(0);
-  }
-  updatePages();
-}
-
 function updatePages() {
   pageIndex = book ? book.currentPage : 0;
   pages.forEach((page, index) => {
     page.classList.toggle("active", index === pageIndex);
   });
 
-  counter.textContent = `${pageIndex + 1} / ${pages.length}`;
+  if (backToStartButton) {
+    backToStartButton.classList.toggle("is-visible", pageIndex === pages.length - 1);
+  }
+
+  if (bgMusic) {
+    if (pageIndex === pages.length - 1) {
+      bgMusic.pause();
+    } else if (invite.classList.contains("hidden") === false) {
+      bgMusic.play().catch(() => {});
+    }
+  }
 }
+
 
 function nextPage() {
   if (book) {
@@ -157,13 +127,27 @@ if (book) {
   book.root.addEventListener("page-turn:change", updatePages);
 }
 
-backToCover.addEventListener("click", backCover);
-
 document.addEventListener("keydown", (event) => {
   if (invite.classList.contains("hidden")) return;
   if (event.key === "ArrowRight") nextPage();
   if (event.key === "ArrowLeft") prevPage();
-  if (event.key === "Escape") backCover();
+});
+
+if (backToStartButton) {
+  backToStartButton.addEventListener("click", () => {
+    invite.classList.add("hidden");
+    cover.classList.remove("hidden", "opening");
+    pageIndex = 0;
+    if (book) {
+      book.goTo(0);
+    }
+    updatePages();
+    startMusic();
+  });
+}
+
+window.addEventListener("load", () => {
+  startMusic();
 });
 
 let touchStartX = 0;
@@ -196,42 +180,6 @@ rsvpForm.addEventListener("submit", (event) => {
   localStorage.setItem("confirmacoes_convite", JSON.stringify(saved));
   rsvpReturn.textContent = "Presença confirmada com sucesso!";
   rsvpForm.reset();
-});
-
-musicBtn.addEventListener("click", async () => {
-  try {
-    if (bgMusic.paused) {
-      await bgMusic.play();
-      musicBtn.textContent = "⏸";
-    } else {
-      bgMusic.pause();
-      musicBtn.textContent = "♪";
-    }
-  } catch {
-    alert("Para ativar a música, coloque um arquivo em assets/musica.mp3 e descomente a tag <source> no index.html.");
-  }
-});
-
-shareBtn.addEventListener("click", async () => {
-  const shareData = {
-    title: "Convite Milena & Bento",
-    text: "Veja nosso convite interativo!",
-    url: window.location.href
-  };
-
-  if (navigator.share) {
-    try {
-      await navigator.share(shareData);
-    } catch (_) {}
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(window.location.href);
-    alert("Link copiado!");
-  } catch {
-    alert("Copie manualmente o link do navegador.");
-  }
 });
 
 updatePages();

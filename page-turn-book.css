@@ -7,11 +7,11 @@
   --pt-duration: 900ms;
   --pt-corner-size: 96px;
   --pt-radius: 18px;
-  --pt-paper: #fffaf2;
-  --pt-paper-2: #f4ecdf;
-  --pt-border: rgba(115, 86, 55, 0.20);
-  --pt-shadow: rgba(38, 25, 12, 0.28);
-  --pt-accent: #b7864b;
+  --pt-paper: #FAF1E6;
+  --pt-paper-2: #F4E8DB;
+  --pt-border: rgba(201, 111, 74, 0.22);
+  --pt-shadow: rgba(62, 55, 47, 0.18);
+  --pt-accent: #C96F4A;
 
   position: relative;
   width: 100%;
@@ -156,8 +156,8 @@
   background:
     linear-gradient(315deg,
       rgba(255,255,255,.98) 0 12%,
-      rgba(244,235,220,.92) 13% 32%,
-      rgba(174,135,75,.28) 48%,
+      rgba(244,232,219,.92) 13% 32%,
+      rgba(201,111,74,.24) 48%,
       rgba(255,255,255,0) 66%);
   filter: drop-shadow(-10px -10px 12px rgba(39,25,12,.20));
   opacity: .72;
@@ -172,8 +172,8 @@
   bottom: 9px;
   width: 28px;
   height: 28px;
-  border-right: 2px solid rgba(105,73,39,.46);
-  border-bottom: 2px solid rgba(105,73,39,.46);
+  border-right: 2px solid rgba(201,111,74,.48);
+  border-bottom: 2px solid rgba(201,111,74,.48);
   opacity: .55;
 }
 
@@ -195,8 +195,8 @@
   bottom: 9px;
   width: 28px;
   height: 28px;
-  border-left: 2px solid rgba(105,73,39,.46);
-  border-bottom: 2px solid rgba(105,73,39,.46);
+  border-left: 2px solid rgba(201,111,74,.48);
+  border-bottom: 2px solid rgba(201,111,74,.48);
   opacity: .55;
 }
 
@@ -221,7 +221,7 @@
   font-weight: 600;
   letter-spacing: .08em;
   text-transform: lowercase;
-  color: rgba(78, 57, 35, .8);
+  color: rgba(111, 118, 88, .85);
   pointer-events: none;
   transform: rotate(-8deg);
   transition: opacity .2s ease;
@@ -247,20 +247,6 @@
 
 .page-turn-book.is-last .page-turn-book__hotspot::before {
   transform: none;
-}
-
-/* Indicador opcional */
-.page-turn-book__counter {
-  position: absolute;
-  right: 16px;
-  top: 14px;
-  z-index: 21;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font: 500 12px/1 system-ui, sans-serif;
-  color: rgba(50, 39, 29, .72);
-  background: rgba(255,255,255,.55);
-  backdrop-filter: blur(8px);
 }
 
 /* Animações principais */
